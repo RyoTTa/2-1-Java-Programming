@@ -1,0 +1,30 @@
+package operation;
+
+import data.*;
+import java.io.*;
+
+public class MemberManage {
+	MemberList Mlist = new MemberList();
+
+	public void readFile() {
+		try {
+			ObjectInputStream input = new ObjectInputStream(new FileInputStream("MemberList.ser"));
+			Mlist = (MemberList)input.readObject();
+			input.close();
+		} catch (Exception e) {
+			System.err.println("File Input Error.");
+		}
+	}
+	
+	public void saveFile(){
+		try{
+			ObjectOutputStream output = new ObjectOutputStream(new FileOutputStream("MemberList.ser"));
+			output.flush();
+			output.writeObject(Mlist);
+			output.close();
+		}
+		catch(Exception e){
+			System.err.println("File Output Error.");
+		}
+	}
+}

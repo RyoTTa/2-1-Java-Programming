@@ -1,0 +1,12 @@
+package data;
+
+public class BookTest {
+
+	public static void main(String[] args) {
+		Book b1 = new Book(001, "a", "b", "c");
+		
+		b1.setReturnDate();
+
+	}
+
+}

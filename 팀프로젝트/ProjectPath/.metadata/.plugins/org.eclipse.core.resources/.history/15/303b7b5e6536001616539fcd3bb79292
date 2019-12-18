@@ -1,0 +1,7 @@
+package operation;
+
+import gui.Layout;
+
+public class TossLayout {
+	
+}

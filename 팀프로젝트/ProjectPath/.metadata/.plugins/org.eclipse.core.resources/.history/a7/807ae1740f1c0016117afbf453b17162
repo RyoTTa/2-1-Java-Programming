@@ -1,0 +1,13 @@
+import javax.swing.JFrame;
+
+public class myCalculatorDemo {
+
+	public static void main(String[] args) {
+		myCalculator phone = new myCalculator();
+		phone.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		phone.setSize(300, 500);
+		phone.setVisible(true);
+		
+	}
+
+}

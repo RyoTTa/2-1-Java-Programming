@@ -1,0 +1,136 @@
+import java.io.FileOutputStream;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.EOFException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.util.NoSuchElementException;
+import java.util.Scanner;
+
+public class ContactBookHandler {
+	private ObjectOutputStream output;
+	private static ObjectInputStream input;
+	private String name;
+	private String pnum;
+	private String email;
+	private static ContactBook contactbook;
+	
+	public void readFile(){
+		
+		try{
+			while(true){
+				Contact con = (Contact) input.readObject();
+				contactbook.addContact(con);
+			}
+		}
+		catch(EOFException endOfFileException){
+			return;
+		}
+		catch(ClassNotFoundException classNotFoundException){
+			System.err.println("Unable to create object");
+		}
+		catch(IOException ioException){
+			System.err.println("Error during read from file");
+		}
+		
+	}
+	public void openFile(){
+		try{
+			output = new ObjectOutputStream(new FileOutputStream("contact.ser"));
+		}
+		catch(IOException ioException){
+			System.out.println("Error opening file.");
+		}
+		try {
+			input = new ObjectInputStream(new FileInputStream("contact.ser"));
+		}
+		catch (IOException e) {
+			System.err.println("Error closing file");
+			System.exit(1);
+		}
+	}
+	
+	public void closeFile(){
+		try{
+			if(output != null)
+				output.close();
+		}
+		catch(IOException ioexception){
+			System.err.println("Error closing file");
+			System.exit(1);
+		}
+	}
+	
+
+	public static void main(String[] args) {
+		int choice, index, exit = 0;
+		contactbook = new ContactBook();
+		Scanner inp = new Scanner(System.in);
+
+		
+		ContactBookHandler app = new ContactBookHandler();
+		app.openFile();
+		
+		app.readFile();
+		
+		while(true){
+			if(exit == 1) break;
+			System.out.println("1. add Contact / 2. remove Contact / 3. print all / 4. save & exit");
+			choice = inp.nextInt();
+			switch(choice){
+			case 1:
+				Contact con = new Contact();
+				String name, pnum, email;
+				
+				System.out.print("name? : ");
+				name = inp.nextLine();
+				name = inp.nextLine();
+				con.setname(name);
+				
+				System.out.print("phoneNumber? : ");
+				pnum = inp.nextLine();
+				con.setpnum(pnum);
+				
+				System.out.print("email? : ");
+				email = inp.nextLine();
+				con.setemail(email);
+				
+				contactbook.addContact(con);
+				break;
+			case 2:
+				System.out.print("index? : ");
+				index = inp.nextInt();
+				if(index>=0) contactbook.removeContact(index);
+				else System.out.println("index out of range");
+				break;
+			case 3:
+				System.out.println("\n--------------------");
+				for(int i=0; i<contactbook.size();i++){
+					System.out.print("name : " + contactbook.get(i).getname()
+							+ "\nphoneNumber : " + contactbook.get(i).getpnum()
+							+ "\nemail : " + contactbook.get(i).getemail());
+					System.out.println("\n--------------------");
+				}
+				break;
+			case 4:
+				for(int i=0; i<contactbook.size();i++){
+					try {
+						app.output.writeObject(contactbook.get(i).getname());
+					} 
+					catch (IOException ioexception) {
+						System.err.println("Error writing to file.");
+						return;
+					}
+				}
+				System.out.println("save and exit");
+				exit = 1;
+				break;
+			default:
+				System.out.println("Invalid choice. Try again.");
+				continue;
+			}
+		}
+		app.closeFile();
+	}
+}

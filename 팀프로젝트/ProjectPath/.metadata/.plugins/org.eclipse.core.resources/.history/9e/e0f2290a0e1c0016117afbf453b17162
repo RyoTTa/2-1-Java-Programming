@@ -1,0 +1,44 @@
+
+public class Calculator {
+
+	double result;
+	
+	public String add(String num){
+		double adding = Double.parseDouble(num);
+		result += adding;
+		String added = String.format("%.1lf", result);
+		return added;
+	}
+	
+	public String sub(String num){
+		double subing = Double.parseDouble(num);
+		result -= subing;
+		String subed = String.format("%.1lf", result);
+		return subed;
+	}
+	
+	public String mul(String num){
+		double muling = Double.parseDouble(num);
+		result *= muling;
+		String muled = String.format("%.1lf", result);
+		return muled;
+	}
+	
+	public String div(String num){
+		double diving = Double.parseDouble(num);
+		if(diving == 0) return String.format("Cannot be divided by zero");
+		else{
+			result /= diving;
+		    String dived = String.format("%.1lf", result);
+		    return dived;
+		}
+	}
+	
+	public String equal(){
+		return String.format("%.1lf", result);
+	}
+	
+	public void setresult(double setting){
+		result = setting;
+	}
+}

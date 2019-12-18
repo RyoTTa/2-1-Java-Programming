@@ -1,0 +1,173 @@
+import java.awt.GridLayout;
+import java.awt.BorderLayout;
+import java.awt.Container;
+import java.awt.event.ActionListener;
+import java.awt.event.ActionEvent;
+import javax.swing.JFrame;
+import javax.swing.Box;
+import javax.swing.JButton;
+import javax.swing.JPanel;
+import javax.swing.JTextField;
+import java.util.ArrayList;
+
+public class myCalculator extends JFrame implements ActionListener{
+	private JButton[] buttons;
+	private static final String[] names = 
+		{"7", "8", "9", "/", "4", "5", "6", "*",
+				"1", "2", "3", "-", "0", ".", "=", "+", "Clear", "Backspace"};
+	private Container container;
+	private BorderLayout borderLayout;
+	private JPanel IcdPanel;
+	private JPanel KeyPanel;
+	private JTextField InputField;
+	private JTextField HistoryField;
+	private String IcdOutPut = "";
+	private String InputNum = "";
+	private String Result = "";
+	private String Temp = "";
+	private String Replace = "";
+	
+	private String numberTemp;
+	private Calculator cal;
+	private ArrayList Token;
+	private int count = 0;
+	private int sch = 0;
+	
+	public myCalculator(){
+		super("myCalculator");
+		cal = new Calculator();
+		IcdPanel = new JPanel();
+		KeyPanel = new JPanel();
+		container = getContentPane();
+		borderLayout = new BorderLayout(0, 0);
+		setLayout(borderLayout);
+		buttons = new JButton[names.length];
+		Token = new ArrayList<String>();
+		
+		InputField = new JTextField();
+		HistoryField = new JTextField();
+		InputField.setEditable(false);
+		HistoryField.setEditable(false);
+		
+		IcdPanel.setLayout(new GridLayout(2, 1));
+		IcdPanel.add(HistoryField);
+		IcdPanel.add(InputField);
+		
+		for(int count = 0; count < names.length; count++){
+			buttons[count] = new JButton(names[count]);
+			buttons[count].addActionListener(this);
+			KeyPanel.setLayout(new GridLayout(5, 3));
+			KeyPanel.add(buttons[count]);
+		}
+		add(IcdPanel, BorderLayout.NORTH);
+		add(KeyPanel, BorderLayout.CENTER);
+	}
+
+	@Override
+	public void actionPerformed(ActionEvent event) {
+		for(JButton button : buttons){
+			if(event.getSource() == button){
+				if(button.getActionCommand() == "+"){
+					numberTemp = InputNum.substring(0, InputNum.length());
+					InputNum = String.format("");
+					IcdOutPut += numberTemp;
+					
+					Temp = numberTemp;
+					Temp += "+";
+					Token.add(Temp);
+					count++;
+					
+					Result = cal.add(numberTemp);
+					IcdOutPut += button.getActionCommand();
+					sch = 1;
+				}
+				else if(button.getActionCommand() == "-"){
+					numberTemp = InputNum.substring(0, InputNum.length());
+					InputNum = String.format("");
+					IcdOutPut += numberTemp;
+					
+					Temp = numberTemp;
+					Temp += "-";
+					Token.add(Temp);
+					count++;
+					
+					Result = cal.sub(numberTemp);
+					IcdOutPut += button.getActionCommand();
+					sch = 1;
+				}
+				else if(button.getActionCommand() == "*"){
+					numberTemp = InputNum.substring(0, InputNum.length());
+					InputNum = String.format("");
+					IcdOutPut += numberTemp;
+					
+					Temp = numberTemp;
+					Temp += "*";
+					Token.add(Temp);
+					count++;
+					
+					Result = cal.mul(numberTemp);
+					IcdOutPut += button.getActionCommand();
+					sch = 1;
+				}
+				else if(button.getActionCommand() == "/"){
+					numberTemp = InputNum.substring(0, InputNum.length());
+					InputNum = String.format("");
+					IcdOutPut += numberTemp;
+					
+					Temp = numberTemp;
+					Temp += "/";
+					Token.add(Temp);
+					count++;
+					
+					Result = cal.div(numberTemp);
+					IcdOutPut += button.getActionCommand();
+					sch = 1;
+				}
+				else if(button.getActionCommand() == "Clear"){
+					count = 0;
+					Result = "";
+					IcdOutPut = String.format("");
+					InputNum = String.format("");
+				}
+				else if(button.getActionCommand() == "Backspace"){
+					
+					char c = IcdOutPut.charAt(IcdOutPut.length()-1);
+					switch(c){
+					case '/':
+						Result = cal.mul(numberTemp);
+						break;
+					case '+':
+						Result = cal.sub(numberTemp);
+						break;
+					case '-':
+						Result = cal.add(numberTemp);
+						break;
+					case '*':
+						Result = cal.div(numberTemp);
+						break;
+					default:
+						//System.out.print("def");
+						break;
+					}
+					if(Token.size() == 0) IcdOutPut = "";
+					else{
+						for(int i=0; i<count-1; i++)
+						Replace += Token.get(i);
+					    count--;
+					    IcdOutPut = Replace;
+					}
+				}
+				else if(button.getActionCommand() == "="){
+					InputNum = String.format("");
+					IcdOutPut = Result;
+				}
+				else{
+					InputNum += String.format(button.getActionCommand());
+				}
+			}
+		}
+		InputField.setText(InputNum);
+		HistoryField.setText(IcdOutPut);
+		borderLayout.layoutContainer(container);
+	}
+}

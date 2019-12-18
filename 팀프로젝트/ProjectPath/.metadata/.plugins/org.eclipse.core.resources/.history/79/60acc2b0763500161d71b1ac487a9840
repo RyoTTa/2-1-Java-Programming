@@ -1,0 +1,37 @@
+package data;
+
+import java.io.Serializable;
+import java.util.ArrayList;
+
+public class MemberList implements Serializable{
+	
+	ArrayList<Member> list = new ArrayList<Member>();
+	
+	public MemberList(){
+	}
+	
+	public boolean Create(String name, String number){
+		for(int i=0; i<list.size(); i++){
+			if(list.get(i).getName() == name && list.get(i).getNumber() == number){
+				return false;
+			}
+		}
+		list.add(new Member(name, number));
+		return true;
+	}
+	
+	public boolean Delete(String search){
+		for(int i=0; i<list.size(); i++){
+			if(list.get(i).getName() == search && list.get(i).getNumber() == search){
+				list.remove(i);
+				return true;
+			}
+		}
+		return false;
+	}
+	
+	public ArrayList<Member> printList(){
+		return list;
+	}
+	
+}

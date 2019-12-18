@@ -1,0 +1,137 @@
+import java.awt.GridLayout;
+import java.awt.BorderLayout;
+import java.awt.Container;
+import java.awt.event.ActionListener;
+import java.awt.event.ActionEvent;
+import javax.swing.JFrame;
+import javax.swing.Box;
+import javax.swing.JButton;
+import javax.swing.JPanel;
+import javax.swing.JTextArea;
+import javax.swing.JTextField;
+
+public class myCalculator extends JFrame implements ActionListener{
+	private JButton[] buttons;
+	private static final String[] names = 
+		{"7", "8", "9", "/", "4", "5", "6", "*",
+				"1", "2", "3", "-", "0", ".", "=", "+", "Clear", "Backspace"};
+	private Container container;
+	private BorderLayout borderLayout;
+	private JPanel IcdPanel;
+	private JPanel KeyPanel;
+	//private JTextArea InputArea;
+	//private JTextArea HistoryArea;
+	private JTextField InputField;
+	private JTextField HistoryField;
+	private String IcdOutPut = "";
+	private String InputNum = "";
+	private String Result = "";
+	
+	private String numberTemp;
+	private int lastLength;
+	private Calculator cal;
+	
+	public myCalculator(){
+		super("myCalculator");
+		cal = new Calculator();
+		IcdPanel = new JPanel();
+		KeyPanel = new JPanel();
+		container = getContentPane();
+		borderLayout = new BorderLayout(0, 0);
+		setLayout(borderLayout);
+		buttons = new JButton[names.length];
+		
+		InputField = new JTextField();
+		HistoryField = new JTextField();
+		InputField.setEditable(false);
+		HistoryField.setEditable(false);
+		
+		IcdPanel.setLayout(new GridLayout(2, 1));
+		IcdPanel.add(HistoryField);
+		IcdPanel.add(InputField);
+		
+		for(int count = 0; count < names.length; count++){
+			buttons[count] = new JButton(names[count]);
+			buttons[count].addActionListener(this);
+			KeyPanel.setLayout(new GridLayout(5, 3));
+			KeyPanel.add(buttons[count]);
+		}
+		add(IcdPanel, BorderLayout.NORTH);
+		add(KeyPanel, BorderLayout.CENTER);
+	}
+
+	@Override
+	public void actionPerformed(ActionEvent event) {
+		for(JButton button : buttons){
+			if(event.getSource() == button){
+				if(button.getActionCommand() == "+"){
+					lastLength = IcdOutPut.length()-1;
+					numberTemp = InputNum.substring(0, InputNum.length());
+					InputNum = String.format("");
+					IcdOutPut += numberTemp;
+					Result = cal.add(numberTemp);
+					IcdOutPut += button.getActionCommand();
+
+				}
+				else if(button.getActionCommand() == "-"){
+					lastLength = IcdOutPut.length()-1;
+					numberTemp = InputNum.substring(0, InputNum.length());
+					InputNum = String.format("");
+					IcdOutPut += numberTemp;
+					Result = cal.sub(numberTemp);
+					IcdOutPut += button.getActionCommand();
+				}
+				else if(button.getActionCommand() == "*"){
+					lastLength = IcdOutPut.length()-1;
+					numberTemp = InputNum.substring(0, InputNum.length());
+					InputNum = String.format("");
+					IcdOutPut += numberTemp;
+					Result = cal.mul(numberTemp);
+					IcdOutPut += button.getActionCommand();
+				}
+				else if(button.getActionCommand() == "/"){
+					lastLength = IcdOutPut.length()-1;
+					numberTemp = InputNum.substring(0, InputNum.length());
+					InputNum = String.format("");
+					IcdOutPut += numberTemp;
+					Result = cal.div(numberTemp);
+					IcdOutPut += button.getActionCommand();
+				}
+				else if(button.getActionCommand() == "Clear"){
+					IcdOutPut = String.format("");
+					InputNum = String.format("");
+				}
+				else if(button.getActionCommand() == "Backspace"){
+					char c = IcdOutPut.charAt(IcdOutPut.length()-1);
+					switch(c){
+					case '/':
+						IcdOutPut.substring(lastLength, IcdOutPut.length());
+						Result = cal.mul(numberTemp);
+					case '+':
+						IcdOutPut.substring(lastLength, IcdOutPut.length());
+						Result = cal.sub(numberTemp);
+					case '-':
+						IcdOutPut.substring(lastLength, IcdOutPut.length());
+						Result = cal.add(numberTemp);
+					case '*':
+						IcdOutPut.substring(lastLength, IcdOutPut.length());
+						Result = cal.div(numberTemp);
+					default:
+						IcdOutPut.substring(lastLength, IcdOutPut.length());
+					}
+					
+				}
+				else if(button.getActionCommand() == "="){
+					InputNum = String.format("");
+					IcdOutPut = Result;
+				}
+				else{
+					InputNum += String.format(button.getActionCommand());
+				}
+			}
+		}
+		InputField.setText(InputNum);
+		HistoryField.setText(IcdOutPut);
+		borderLayout.layoutContainer(container);
+	}
+}

@@ -1,0 +1,102 @@
+package gui;
+
+import java.awt.BorderLayout;
+import java.awt.Color;
+import java.awt.EventQueue;
+
+import javax.swing.JFrame;
+import javax.swing.JPanel;
+import javax.swing.border.EmptyBorder;
+import javax.swing.table.DefaultTableModel;
+import javax.swing.BoxLayout;
+import javax.swing.ImageIcon;
+import javax.swing.JButton;
+import java.awt.GridLayout;
+import java.awt.FlowLayout;
+import java.awt.event.ActionListener;
+import java.awt.event.ActionEvent;
+import javax.swing.JTextField;
+import javax.swing.JTextPane;
+import javax.swing.JLabel;
+import javax.swing.JComboBox;
+import javax.swing.JFormattedTextField;
+import javax.swing.JList;
+import javax.swing.JOptionPane;
+import javax.swing.JTable;
+
+import operation.MemberManage;
+
+public class Book_Return_Member extends JFrame {
+
+   private JPanel contentPane;
+   
+   private JTextField name_field;
+   private JTextField num_field;
+   private JTextField book_num_field;
+   private JLabel book_list;
+   private JLabel num;
+   private JLabel name;
+   private JLabel book_num;
+   private JButton return_button;
+   private JTable book_table;
+   public Book_Return_Member temp;
+   
+   private JTable table;
+   private DefaultTableModel mod;
+
+   public Book_Return_Member(JTable table,DefaultTableModel mod) {
+      temp = this;
+      this.table=table;
+      this.mod=mod;
+      
+      setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+      setBounds(100, 100, 560, 560);
+      contentPane = new JPanel();
+      contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
+      setContentPane(contentPane);
+      contentPane.setLayout(null);
+      
+      name = new JLabel("이름");
+      name.setBounds(25, 27, 57, 22);
+      contentPane.add(name);
+  
+      
+      name_field = new JTextField();
+      name_field.setBounds(94, 28, 82, 21);
+      contentPane.add(name_field);
+      name_field.setColumns(10);
+      name_field.setEditable(false);
+      
+      num = new JLabel("번호");
+      num.setBounds(188, 27, 57, 22);
+      contentPane.add(num);
+      
+      num_field = new JTextField();
+      num_field.setBounds(257, 28, 82, 21);
+      contentPane.add(num_field);
+      num_field.setColumns(10);
+      num_field.setEditable(false);
+      
+      book_num = new JLabel("대출책 수");
+      book_num.setBounds(351, 27, 57, 22);
+      contentPane.add(book_num);
+      
+      book_num_field = new JTextField();
+      book_num_field.setBounds(416, 28, 82, 21);
+      contentPane.add(book_num_field);
+      book_num_field.setColumns(10);
+      book_num_field.setEditable(false);
+      
+      book_list = new JLabel("대여한 책 목록");
+      book_list.setBounds(25, 94, 120, 22);
+      contentPane.add(book_list);
+      
+      book_table = new JTable();
+      book_table.setBounds(25, 142, 382, 358);
+      contentPane.add(book_table);
+      
+      return_button = new JButton("반납");
+      return_button.setBounds(429, 142, 97, 42);
+      contentPane.add(return_button);
+   }
+}
